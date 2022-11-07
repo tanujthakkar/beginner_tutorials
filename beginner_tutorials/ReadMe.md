@@ -18,7 +18,7 @@ This repository contains tutorials from <a href="http://docs.ros.org/en/humble/T
     source "your_colcon_workspace"/install/setup.bash
 ```
 
-After you've compiler and sourced your workspace
+After you've compiled and sourced your workspace
 
 ## Running publisher
 ```
