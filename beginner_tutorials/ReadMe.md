@@ -46,7 +46,7 @@ Follow same compile and build instructions as above.
 ## Results
 
 ### Service and Logging
-![image](https://github.com/tanujthakkar/beginner_tutorials/tree/Week10_HW/beginner_tutorials/results/service_and_logging.png)
+![image](https://github.com/tanujthakkar/beginner_tutorials/blob/Week10_HW/beginner_tutorials/results/service_and_logging.png)
 
 ### rqt_console
-![image](https://github.com/tanujthakkar/beginner_tutorials/tree/Week10_HW/beginner_tutorials/results/rqt_console_output.png)
+![image](https://github.com/tanujthakkar/beginner_tutorials/blob/Week10_HW/beginner_tutorials/results/rqt_console_output.png)
