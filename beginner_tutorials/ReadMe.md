@@ -25,7 +25,28 @@ After you've compiled and sourced your workspace
     ros2 run beginner_tutorials talker
 ```
 
-## Running publisher
+## Running Subscriber
 ```
     ros2 run beginner_tutorials listener
 ```
+
+# Service - Logging - Launch Files
+
+## Compile and run instructions
+```
+  git checkout Week10_HW_Release
+```
+Follow same compile and build instructions as above.
+
+## Using the launch file with argument
+```
+  ros2 launch beginner_tutorials beginner_tutorials.yaml count:=10
+```
+
+## Results
+
+### Service and Logging
+![image](https://github.com/tanujthakkar/beginner_tutorials/blob/Week10_HW/beginner_tutorials/results/service_and_logging.png)
+
+### rqt_console
+![image](https://github.com/tanujthakkar/beginner_tutorials/blob/Week10_HW/beginner_tutorials/results/rqt_console_output.png)
