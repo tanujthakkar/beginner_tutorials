@@ -32,6 +32,8 @@ SOFTWARE.
  *
  */
 
+#pragma once
+
 #include <memory>
 
 #include "rclcpp/rclcpp.hpp"
