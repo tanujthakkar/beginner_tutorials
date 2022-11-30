@@ -1,0 +1,2 @@
+cppcheck --enable=all --std=c++17 --suppress=missingIncludeSystem --suppress=unusedFunction $( find . -name *.cpp -or -name *.hpp )
+cppcheck --enable=all --std=c++17 --suppress=missingIncludeSystem --suppress=unusedFunction $( find . -name *.cpp -or -name *.hpp ) > results/cppcheck.txt
