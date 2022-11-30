@@ -25,86 +25,73 @@ SOFTWARE.
 /**
  * @copyright Copyright (c) 2022
  * @file subscriber.cpp
- * @author Tanuj Thakkar (tanuj@phantomauto.com)
+ * @author Tanuj Thakkar (tanuj@umd.edu)
  * @version 0.1
  * @date 2022-11-06
  *
- * @brief ROS2 Subscriber
+ * @brief ROS2 Subscriber source file
  *
  */
 
-#include <memory>
+#include <beginner_tutorials/subscriber.hpp>
 
-#include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
-using std::placeholders::_1;
 
 /**
- * @brief Class to represent subscriber and service client
- * 
- */
-class MinimalSubscriber : public rclcpp::Node {
- public:
-  /**
-   * @brief Construct a new Minimal Subscriber object
-   * 
-   */
-  MinimalSubscriber() : Node("minimal_subscriber") {
-    if (rcutils_logging_set_logger_level(
-            this->get_logger().get_name(),
-            RCUTILS_LOG_SEVERITY::RCUTILS_LOG_SEVERITY_DEBUG) ==
-        RCUTILS_RET_OK) {
-      RCLCPP_INFO_STREAM(this->get_logger(), "Set logger level DEBUG success.");
-    } else {
-      RCLCPP_ERROR_STREAM(this->get_logger(), "Set logger level DEBUG fails.");
-    }
-
-    subscription_ = this->create_subscription<std_msgs::msg::String>(
-        "talker", 10, std::bind(&MinimalSubscriber::topic_callback, this, _1));
+  * @brief Construct a new Minimal Subscriber object
+  * 
+  */
+MinimalSubscriber::MinimalSubscriber() : Node("minimal_subscriber") {
+  if (rcutils_logging_set_logger_level(
+          this->get_logger().get_name(),
+          RCUTILS_LOG_SEVERITY::RCUTILS_LOG_SEVERITY_DEBUG) == RCUTILS_RET_OK) {
+    RCLCPP_INFO_STREAM(this->get_logger(), "Set logger level DEBUG success.");
+  } else {
+    RCLCPP_ERROR_STREAM(this->get_logger(), "Set logger level DEBUG fails.");
   }
 
- private:
-  /**
-   * @brief Callback to get count
-   * 
-   * @param msg 
-   */
-  void topic_callback(const std_msgs::msg::String &msg) const {
-    this->logger(msg);
+  subscription_ = this->create_subscription<std_msgs::msg::String>(
+      "talker", 10, std::bind(&MinimalSubscriber::topic_callback, this, _1));
+}
+
+/**
+  * @brief Callback to get count
+  * 
+  * @param msg 
+  */
+void MinimalSubscriber::topic_callback(const std_msgs::msg::String &msg) const {
+  this->logger(msg);
+}
+
+/**
+  * @brief Switch to display received count logging levels
+  * 
+  * @param msg 
+  */
+void MinimalSubscriber::logger(const std_msgs::msg::String &msg) const {
+  int count = stoi(msg.data);
+  switch (count % 5) {
+  case 0:
+    RCLCPP_DEBUG_STREAM(this->get_logger(), "Count Received: " << msg.data);
+    break;
+  case 1:
+    RCLCPP_INFO_STREAM(this->get_logger(), "Count Received: " << msg.data);
+    break;
+  case 2:
+    RCLCPP_WARN_STREAM(this->get_logger(), "Count Received: " << msg.data);
+    break;
+  case 3:
+    RCLCPP_ERROR_STREAM(this->get_logger(), "Count Received: " << msg.data);
+    break;
+  case 4:
+    RCLCPP_FATAL_STREAM(this->get_logger(), "Count Received: " << msg.data);
+    break;
+  default:
+    break;
+
+    return;
   }
+}
 
-  /**
-   * @brief Switch to display received count logging levels
-   * 
-   * @param msg 
-   */
-  void logger(const std_msgs::msg::String &msg) const {
-    int count = stoi(msg.data);
-    switch (count % 5) {
-      case 0:
-        RCLCPP_DEBUG_STREAM(this->get_logger(), "Count Received: " << msg.data);
-        break;
-      case 1:
-        RCLCPP_INFO_STREAM(this->get_logger(), "Count Received: " << msg.data);
-        break;
-      case 2:
-        RCLCPP_WARN_STREAM(this->get_logger(), "Count Received: " << msg.data);
-        break;
-      case 3:
-        RCLCPP_ERROR_STREAM(this->get_logger(), "Count Received: " << msg.data);
-        break;
-      case 4:
-        RCLCPP_FATAL_STREAM(this->get_logger(), "Count Received: " << msg.data);
-        break;
-      default:
-        break;
-
-        return;
-    }
-  }
-
-  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_;
-};
 
 int main(int argc, char *argv[]) {
   rclcpp::init(argc, argv);
