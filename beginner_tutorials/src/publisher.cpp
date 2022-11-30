@@ -76,6 +76,26 @@ MinimalPublisher::MinimalPublisher() : Node("minimal_publisher"), count_(0) {
 }
 
 /**
+ * @brief Get the tf world talk object
+ *
+ * @return geometry_msgs::msg::Transform
+ */
+geometry_msgs::msg::TransformStamped MinimalPublisher::get_tf_world_talk()
+    const {
+  return tf_world_talk_;
+}
+
+/**
+ * @brief Set the tf world talk object
+ *
+ * @param tf_world_talk
+ */
+void MinimalPublisher::set_tf_world_talk(
+    const geometry_msgs::msg::TransformStamped &tf_world_talk) {
+  tf_world_talk_ = tf_world_talk;
+}
+
+/**
  * @brief Callback from timer
  *
  */
@@ -145,6 +165,7 @@ void MinimalPublisher::tf_broadcast_timer_callback() {
   transform_stamped.transform.translation.y = 5.0;
   transform_stamped.transform.translation.z = 5.0;
   transform_stamped.transform.rotation = tf2::toMsg(quat);
+  set_tf_world_talk(transform_stamped);
 
   tf_broadcaster_->sendTransform(transform_stamped);
 }

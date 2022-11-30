@@ -36,8 +36,8 @@ SOFTWARE.
 
 #include <tf2_ros/transform_broadcaster.h>
 
-#include <chrono>
 #include <beginner_tutorials/srv/count.hpp>
+#include <chrono>
 #include <functional>
 #include <geometry_msgs/msg/transform_stamped.hpp>
 #include <memory>
@@ -62,6 +62,21 @@ class MinimalPublisher : public rclcpp::Node {
    */
   MinimalPublisher();
 
+  /**
+   * @brief Get the tf world talk object
+   *
+   * @return geometry_msgs::msg::Transform
+   */
+  geometry_msgs::msg::TransformStamped get_tf_world_talk() const;
+
+  /**
+   * @brief Set the tf world talk object
+   *
+   * @param tf_world_talk
+   */
+  void set_tf_world_talk(
+      const geometry_msgs::msg::TransformStamped& tf_world_talk);
+
  private:
   /**
    * @brief Callback from timer
@@ -74,7 +89,7 @@ class MinimalPublisher : public rclcpp::Node {
    *
    * @param msg
    */
-  void logger(const std_msgs::msg::String &msg);
+  void logger(const std_msgs::msg::String& msg);
 
   /**
    * @brief Get the count callback object
@@ -95,5 +110,6 @@ class MinimalPublisher : public rclcpp::Node {
   rclcpp::Service<Count>::SharedPtr get_count_service_;
   std::unique_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
   rclcpp::TimerBase::SharedPtr tf_broadcaster_timer_;
+  geometry_msgs::msg::TransformStamped tf_world_talk_;
   int count_;
 };
