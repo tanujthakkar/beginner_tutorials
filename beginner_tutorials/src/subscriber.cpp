@@ -35,11 +35,10 @@ SOFTWARE.
 
 #include <beginner_tutorials/subscriber.hpp>
 
-
 /**
-  * @brief Construct a new Minimal Subscriber object
-  * 
-  */
+ * @brief Construct a new Minimal Subscriber object
+ *
+ */
 MinimalSubscriber::MinimalSubscriber() : Node("minimal_subscriber") {
   if (rcutils_logging_set_logger_level(
           this->get_logger().get_name(),
@@ -54,44 +53,43 @@ MinimalSubscriber::MinimalSubscriber() : Node("minimal_subscriber") {
 }
 
 /**
-  * @brief Callback to get count
-  * 
-  * @param msg 
-  */
+ * @brief Callback to get count
+ *
+ * @param msg
+ */
 void MinimalSubscriber::topic_callback(const std_msgs::msg::String &msg) const {
   this->logger(msg);
 }
 
 /**
-  * @brief Switch to display received count logging levels
-  * 
-  * @param msg 
-  */
+ * @brief Switch to display received count logging levels
+ *
+ * @param msg
+ */
 void MinimalSubscriber::logger(const std_msgs::msg::String &msg) const {
   int count = stoi(msg.data);
   switch (count % 5) {
-  case 0:
-    RCLCPP_DEBUG_STREAM(this->get_logger(), "Count Received: " << msg.data);
-    break;
-  case 1:
-    RCLCPP_INFO_STREAM(this->get_logger(), "Count Received: " << msg.data);
-    break;
-  case 2:
-    RCLCPP_WARN_STREAM(this->get_logger(), "Count Received: " << msg.data);
-    break;
-  case 3:
-    RCLCPP_ERROR_STREAM(this->get_logger(), "Count Received: " << msg.data);
-    break;
-  case 4:
-    RCLCPP_FATAL_STREAM(this->get_logger(), "Count Received: " << msg.data);
-    break;
-  default:
-    break;
+    case 0:
+      RCLCPP_DEBUG_STREAM(this->get_logger(), "Count Received: " << msg.data);
+      break;
+    case 1:
+      RCLCPP_INFO_STREAM(this->get_logger(), "Count Received: " << msg.data);
+      break;
+    case 2:
+      RCLCPP_WARN_STREAM(this->get_logger(), "Count Received: " << msg.data);
+      break;
+    case 3:
+      RCLCPP_ERROR_STREAM(this->get_logger(), "Count Received: " << msg.data);
+      break;
+    case 4:
+      RCLCPP_FATAL_STREAM(this->get_logger(), "Count Received: " << msg.data);
+      break;
+    default:
+      break;
 
-    return;
+      return;
   }
 }
-
 
 int main(int argc, char *argv[]) {
   rclcpp::init(argc, argv);

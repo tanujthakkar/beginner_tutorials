@@ -40,31 +40,30 @@ SOFTWARE.
 #include "std_msgs/msg/string.hpp"
 using std::placeholders::_1;
 
-
 /**
  * @brief Class to represent subscriber and service client
- * 
+ *
  */
 class MinimalSubscriber : public rclcpp::Node {
  public:
   /**
    * @brief Construct a new Minimal Subscriber object
-   * 
+   *
    */
   MinimalSubscriber();
 
  private:
   /**
    * @brief Callback to get count
-   * 
-   * @param msg 
+   *
+   * @param msg
    */
   void topic_callback(const std_msgs::msg::String &msg) const;
 
   /**
    * @brief Switch to display received count logging levels
-   * 
-   * @param msg 
+   *
+   * @param msg
    */
   void logger(const std_msgs::msg::String &msg) const;
 
