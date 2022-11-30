@@ -35,14 +35,13 @@ SOFTWARE.
 #include <beginner_tutorials/publisher.hpp>
 
 /**
-  * @brief Construct a new Minimal Publisher object
-  *
-  */
+ * @brief Construct a new Minimal Publisher object
+ *
+ */
 MinimalPublisher::MinimalPublisher() : Node("minimal_publisher"), count_(0) {
   if (rcutils_logging_set_logger_level(
           this->get_logger().get_name(),
-          RCUTILS_LOG_SEVERITY::RCUTILS_LOG_SEVERITY_DEBUG) ==
-      RCUTILS_RET_OK) {
+          RCUTILS_LOG_SEVERITY::RCUTILS_LOG_SEVERITY_DEBUG) == RCUTILS_RET_OK) {
     RCLCPP_INFO_STREAM(this->get_logger(), "Set logger level DEBUG success.");
   } else {
     RCLCPP_ERROR_STREAM(this->get_logger(), "Set logger level DEBUG fails.");
@@ -69,12 +68,17 @@ MinimalPublisher::MinimalPublisher() : Node("minimal_publisher"), count_(0) {
   get_count_service_ = this->create_service<Count>(
       get_count_service_name,
       std::bind(&MinimalPublisher::get_count_callback, this, _1, _2));
+
+  // Creating a tf broadcaster
+  tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
+  tf_broadcaster_timer_ = this->create_wall_timer(
+      300ms, std::bind(&MinimalPublisher::tf_broadcast_timer_callback, this));
 }
 
 /**
-  * @brief Callback from timer
-  *
-  */
+ * @brief Callback from timer
+ *
+ */
 void MinimalPublisher::timer_callback() {
   auto message = std_msgs::msg::String();
   count_ = this->get_parameter("count").get_parameter_value().get<int>();
@@ -86,44 +90,63 @@ void MinimalPublisher::timer_callback() {
 }
 
 /**
-  * @brief Switch to reproduce logging levels
-  *
-  * @param msg
-  */
+ * @brief Switch to reproduce logging levels
+ *
+ * @param msg
+ */
 void MinimalPublisher::logger(const std_msgs::msg::String &msg) {
   int count = stoi(msg.data);
   switch (count % 5) {
-  case 0:
-    RCLCPP_DEBUG_STREAM(this->get_logger(), "Count: " << msg.data);
-    break;
-  case 1:
-    RCLCPP_INFO_STREAM(this->get_logger(), "Count: " << msg.data);
-    break;
-  case 2:
-    RCLCPP_WARN_STREAM(this->get_logger(), "Count: " << msg.data);
-    break;
-  case 3:
-    RCLCPP_ERROR_STREAM(this->get_logger(), "Count: " << msg.data);
-    break;
-  case 4:
-    RCLCPP_FATAL_STREAM(this->get_logger(), "Count: " << msg.data);
-    break;
-  default:
-    break;
+    case 0:
+      RCLCPP_DEBUG_STREAM(this->get_logger(), "Count: " << msg.data);
+      break;
+    case 1:
+      RCLCPP_INFO_STREAM(this->get_logger(), "Count: " << msg.data);
+      break;
+    case 2:
+      RCLCPP_WARN_STREAM(this->get_logger(), "Count: " << msg.data);
+      break;
+    case 3:
+      RCLCPP_ERROR_STREAM(this->get_logger(), "Count: " << msg.data);
+      break;
+    case 4:
+      RCLCPP_FATAL_STREAM(this->get_logger(), "Count: " << msg.data);
+      break;
+    default:
+      break;
   }
 
   return;
 }
 
 /**
-  * @brief Get the count callback object
-  *
-  * @param request
-  * @param response
-  */
-void MinimalPublisher::get_count_callback (const std::shared_ptr<Count::Request> request, std::shared_ptr<Count::Response> response) {
+ * @brief Get the count callback object
+ *
+ * @param request
+ * @param response
+ */
+void MinimalPublisher::get_count_callback(
+    const std::shared_ptr<Count::Request> request,
+    std::shared_ptr<Count::Response> response) {
   (void)request;
   response->count = count_;
+}
+
+void MinimalPublisher::tf_broadcast_timer_callback() {
+  tf2::Quaternion quat;
+  quat.setRPY(0, 0.735, -0.735);
+
+  geometry_msgs::msg::TransformStamped transform_stamped;
+
+  transform_stamped.header.stamp = this->get_clock()->now();
+  transform_stamped.header.frame_id = "world";
+  transform_stamped.child_frame_id = "talk";
+  transform_stamped.transform.translation.x = 5.0;
+  transform_stamped.transform.translation.y = 5.0;
+  transform_stamped.transform.translation.z = 5.0;
+  transform_stamped.transform.rotation = tf2::toMsg(quat);
+
+  tf_broadcaster_->sendTransform(transform_stamped);
 }
 
 int main(int argc, char *argv[]) {
