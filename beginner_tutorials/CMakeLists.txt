@@ -19,6 +19,10 @@ rosidl_generate_interfaces(${PROJECT_NAME}
  )
 ament_export_dependencies(rosidl_default_runtime)
 
+include_directories(
+  include
+)
+
 add_executable(talker src/publisher.cpp)
 ament_target_dependencies(talker rclcpp std_msgs)
 
