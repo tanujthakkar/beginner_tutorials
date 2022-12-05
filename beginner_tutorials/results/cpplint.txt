@@ -1,2 +1,6 @@
-Done processing beginner_tutorials/src/publisher.cpp
-Done processing beginner_tutorials/src/subscriber.cpp
+Done processing ./include/beginner_tutorials/publisher.hpp
+Done processing ./include/beginner_tutorials/subscriber.hpp
+Done processing ./src/publisher.cpp
+Done processing ./src/subscriber.cpp
+Done processing ./test/main.cpp
+Done processing ./test/test.cpp
